@@ -5,7 +5,7 @@ import axios from "axios";
 import { Modal, Input, Select } from "antd";
 import ButtonComponent from "../components/ButtonComponent/ButtonComponent";
 import { DeleteOutlined } from "@ant-design/icons";
-
+import AddPerson from "../components/addPersonComponent/AddPerson";
 function App() {
   const { Option } = Select;
   const selectOptions = [
@@ -66,13 +66,6 @@ function App() {
     address: { street: "", city: "" },
     phone: "",
   });
-  // const [newPersonForUpdate, setNewPersonForUpdate] = {
-  //   name: "",
-  //   email: "",
-  //   gender: "",
-  //   address: { street: "", city: "" },
-  //   phone: "",
-  // };
 
   const deleteRow = (record: any) => {
     console.log(record.id);
@@ -85,17 +78,18 @@ function App() {
       },
     });
   };
-  const deleteReq = (id: any) => {
-    console.log(id);
+  const deleteReq = async (id: any) => {
+    try {
+      await axios.delete(`http://localhost:3000/data/${id}`);
 
-    axios
-      .delete(`http://localhost:3000/data/${id}`)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      // make a new request to get the updated data after deleting the item
+      const response = await axios.get("http://localhost:3000/data");
+      const data = response.data;
+
+      setDataSource(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const updateReq = (record: any) => {
     console.log(record);
@@ -132,10 +126,11 @@ function App() {
     };
 
     fetchData();
-  }, []);
+  }, [editingPerson]);
+
   return (
     <>
-      <ButtonComponent />
+      <ButtonComponent setDataSource={setDataSource} />
       <div className='divider'></div>
       <Table
         columns={columns}
@@ -241,6 +236,7 @@ function App() {
           placeholder='phone'
         />
       </Modal>
+      <ButtonComponent setDataSource={setDataSource} />
     </>
   );
 }

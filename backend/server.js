@@ -88,7 +88,7 @@ app.delete("/data/:id", (req, res) => {
     fs.readFileSync(path.join(__dirname, "data", "data.json"))
   );
 
-  const index = data.findIndex((obj) => obj.id === id);
+  const index = data.findIndex((obj) => obj.id == id);
 
   if (index === -1) {
     return res.status(404).send("Object not found");
