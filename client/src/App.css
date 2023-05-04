@@ -12,3 +12,11 @@
 .read-the-docs {
   color: #888;
 }
+.divider {
+  border: 1px solid black;
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+.marginer {
+  margin-bottom: 10px;
+}
