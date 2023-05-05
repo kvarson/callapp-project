@@ -6,6 +6,7 @@ import { Modal, Input, Select } from "antd";
 import ButtonComponent from "../components/ButtonComponent/ButtonComponent";
 import { DeleteOutlined } from "@ant-design/icons";
 import AddPerson from "../components/addPersonComponent/AddPerson";
+import { Link } from "react-router-dom";
 function App() {
   const { Option } = Select;
   const selectOptions = [
@@ -130,6 +131,12 @@ function App() {
 
   return (
     <>
+      <Link style={{ marginBottom: "30px" }} to='/chart'>
+        Click to see Chart
+      </Link>
+      <div style={{ borderColor: "white" }}></div>
+
+      <br />
       <ButtonComponent setDataSource={setDataSource} />
       <div className='divider'></div>
       <Table
