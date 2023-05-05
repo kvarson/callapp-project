@@ -3,6 +3,7 @@ import { Modal, Input, Select } from "antd";
 import axios from "axios";
 
 const AddPerson = ({ isAdding, setIsAdding, setDataSource }) => {
+  console.log(setDataSource);
   const { Option } = Select;
   const selectOptions = [
     { value: "female", label: "Female" },

@@ -5,8 +5,14 @@ import axios from "axios";
 import { Modal, Input, Select } from "antd";
 import ButtonComponent from "../components/ButtonComponent/ButtonComponent";
 import { DeleteOutlined } from "@ant-design/icons";
-import AddPerson from "../components/addPersonComponent/AddPerson";
 import { Link } from "react-router-dom";
+import { create } from "zustand";
+
+const useStore = create((set) => ({
+  dataSource: [],
+  setDataSource: (data: any) => set({ dataSource: data }),
+}));
+
 function App() {
   const { Option } = Select;
   const selectOptions = [
@@ -58,7 +64,7 @@ function App() {
       },
     },
   ]);
-  const [dataSource, setDataSource] = useState([]);
+
   const [isEdit, setIsEdit] = useState(false);
   const [editingPerson, setEditingPerson] = useState({
     name: "",
@@ -67,7 +73,9 @@ function App() {
     address: { street: "", city: "" },
     phone: "",
   });
+  const { dataSource, setDataSource } = useStore();
 
+  console.log(setDataSource);
   const deleteRow = (record: any) => {
     console.log(record.id);
     Modal.confirm({
@@ -79,6 +87,7 @@ function App() {
       },
     });
   };
+
   const deleteReq = async (id: any) => {
     try {
       await axios.delete(`http://localhost:3000/data/${id}`);
@@ -87,13 +96,13 @@ function App() {
       const response = await axios.get("http://localhost:3000/data");
       const data = response.data;
 
-      setDataSource(data);
+      useStore.setState({ dataSource: data });
     } catch (error) {
       console.log(error);
     }
   };
+
   const updateReq = (record: any) => {
-    console.log(record);
     axios
       .put(`http://localhost:3000/data/${record.id}`, editingPerson)
       .then((response) => {
@@ -103,6 +112,7 @@ function App() {
         console.log(error);
       });
   };
+
   const resetEditing = () => {
     setIsEdit(false);
     setEditingPerson({
@@ -119,15 +129,14 @@ function App() {
       try {
         const response = await axios.get("http://localhost:3000/data");
         const data = response.data;
-
-        setDataSource(data);
+        useStore.setState({ dataSource: data });
       } catch (error) {
         console.log(error);
       }
     };
 
     fetchData();
-  }, [editingPerson]);
+  }, [editingPerson, setDataSource]);
 
   return (
     <>
