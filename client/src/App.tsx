@@ -8,10 +8,10 @@ import { DeleteOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { create } from "zustand";
 interface Store {
-  dataSource: [];
-  setDataSource: (data: []) => void;
+  dataSource: Person[];
+  setDataSource: (data: Person[]) => void;
 }
-interface dataObject {
+interface Person {
   id: string | number;
   name: string;
   email: string;
@@ -68,7 +68,7 @@ function App() {
     },
     {
       title: "Row-controller",
-      render: (record: dataObject) => {
+      render: (record: Person) => {
         return (
           <>
             <DeleteOutlined
@@ -91,7 +91,7 @@ function App() {
   });
   const { dataSource, setDataSource } = useStore() as Store;
 
-  const deleteRow = (record: dataObject) => {
+  const deleteRow = (record: Person) => {
     Modal.confirm({
       title: "Are you sure, you want to delete this person record?",
       okText: "Yes",
@@ -115,7 +115,7 @@ function App() {
     }
   };
 
-  const updateReq = (record: dataObject) => {
+  const updateReq = (record: Person) => {
     axios
       .put(`http://localhost:3000/data/${record.id}`, editingPerson)
       .then((response) => {
@@ -162,9 +162,10 @@ function App() {
       <ButtonComponent setDataSource={setDataSource} />
       <div className='divider'></div>
       <Table
+        rowKey='id'
         columns={columns}
         dataSource={dataSource}
-        onRow={(record: dataObject) => ({
+        onRow={(record: Person) => ({
           onDoubleClick: () => {
             setEditingPerson(record);
             setIsEdit(true);
