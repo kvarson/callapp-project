@@ -12,7 +12,7 @@ interface Store {
   setDataSource: (data: []) => void;
 }
 interface dataObject {
-  // id: number | string;
+  id: string | number;
   name: string;
   email: string;
   gender: string;
