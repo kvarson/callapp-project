@@ -1,23 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
-// import PieChart from "antd/es/chart/PieChart";
 import { Pie } from "@ant-design/plots";
-// import { Pie } from "@ant-design/charts";
-// import { Line } from "@ant-design/charts";
 import axios from "axios";
-
-const dataz = [
-  { type: "Direct", value: 335 },
-  { type: "Email", value: 310 },
-  { type: "Affiliate", value: 274 },
-  { type: "Video Ads", value: 235 },
-  { type: "Search", value: 400 },
-];
 
 const ChartComponent = () => {
   const [data, setData] = useState(null);
-  console.log(data);
   const fetchData = async () => {
     try {
       const response = await axios.get("http://localhost:3000/data");
@@ -31,12 +18,15 @@ const ChartComponent = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
-  // calculate the percentage of people in each city
+  if (!data) {
+    return <div>Loading...</div>;
+  }
   const cities = {};
   data?.forEach((person) => {
-    const city = person.address.city;
-    cities[city] = (cities[city] || 0) + 1;
+    const city = person?.address?.city;
+    if (city) {
+      cities[city] = (cities[city] || 0) + 1;
+    }
   });
 
   const cityData = Object.keys(cities).map((city) => ({
@@ -44,6 +34,7 @@ const ChartComponent = () => {
     value: cities[city],
     percent: ((cities[city] / data.length) * 100).toFixed(2),
   }));
+
   return (
     <>
       <Link to='/'>Click to Go back to the table</Link>

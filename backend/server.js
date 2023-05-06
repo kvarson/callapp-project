@@ -60,14 +60,17 @@ app.post("/data", (req, res) => {
 
 app.put("/data/:id", (req, res) => {
   const id = parseInt(req.params.id);
+  console.log(id);
 
   const data = JSON.parse(
     fs.readFileSync(path.join(__dirname, "data", "data.json"))
   );
 
-  const index = data.findIndex((item) => item.id === id);
+  const index = data.findIndex((item) => item.id == id);
+  console.log(index);
 
   if (index !== -1) {
+    console.log(index);
     data[index] = { id: id, ...req.body };
 
     fs.writeFileSync(

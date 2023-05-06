@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { Button } from "antd";
 import AddPerson from "../addPersonComponent/AddPerson";
 
-const ButtonComponent = ({ setDataSource }) => {
+type Props = {
+  setDataSource: (data: []) => void;
+};
+
+const ButtonComponent = ({ setDataSource }: Props) => {
   const [isAdding, setIsAdding] = useState(false);
 
   return (

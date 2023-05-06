@@ -7,10 +7,25 @@ import ButtonComponent from "../components/ButtonComponent/ButtonComponent";
 import { DeleteOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { create } from "zustand";
+interface Store {
+  dataSource: [];
+  setDataSource: (data: []) => void;
+}
+interface dataObject {
+  // id: number | string;
+  name: string;
+  email: string;
+  gender: string;
+  address: {
+    street: string;
+    city: string;
+  };
+  phone: string;
+}
 
-const useStore = create((set) => ({
+const useStore = create<Store>((set) => ({
   dataSource: [],
-  setDataSource: (data: any) => set({ dataSource: data }),
+  setDataSource: (data) => set({ dataSource: data }),
 }));
 
 function App() {
@@ -23,6 +38,7 @@ function App() {
     {
       title: "ID",
       dataIndex: "id",
+      key: "id",
     },
     {
       title: "Name",
@@ -52,7 +68,7 @@ function App() {
     },
     {
       title: "Row-controller",
-      render: (record: any) => {
+      render: (record: dataObject) => {
         return (
           <>
             <DeleteOutlined
@@ -73,11 +89,9 @@ function App() {
     address: { street: "", city: "" },
     phone: "",
   });
-  const { dataSource, setDataSource } = useStore();
+  const { dataSource, setDataSource } = useStore() as Store;
 
-  console.log(setDataSource);
-  const deleteRow = (record: any) => {
-    console.log(record.id);
+  const deleteRow = (record: dataObject) => {
     Modal.confirm({
       title: "Are you sure, you want to delete this person record?",
       okText: "Yes",
@@ -88,11 +102,10 @@ function App() {
     });
   };
 
-  const deleteReq = async (id: any) => {
+  const deleteReq = async (id: string | number) => {
     try {
       await axios.delete(`http://localhost:3000/data/${id}`);
 
-      // make a new request to get the updated data after deleting the item
       const response = await axios.get("http://localhost:3000/data");
       const data = response.data;
 
@@ -102,7 +115,7 @@ function App() {
     }
   };
 
-  const updateReq = (record: any) => {
+  const updateReq = (record: dataObject) => {
     axios
       .put(`http://localhost:3000/data/${record.id}`, editingPerson)
       .then((response) => {
@@ -151,7 +164,7 @@ function App() {
       <Table
         columns={columns}
         dataSource={dataSource}
-        onRow={(record: any) => ({
+        onRow={(record: dataObject) => ({
           onDoubleClick: () => {
             setEditingPerson(record);
             setIsEdit(true);
@@ -200,7 +213,7 @@ function App() {
           placeholder='select gender'
           style={{ width: "100%" }}
         >
-          {selectOptions.map((option: any) => (
+          {selectOptions.map((option) => (
             <Option key={option.value} value={option.value}>
               {option.label}
             </Option>

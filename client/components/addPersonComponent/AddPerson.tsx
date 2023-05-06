@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { Modal, Input, Select } from "antd";
 import axios from "axios";
+type Props = {
+  isAdding: boolean;
+  setIsAdding: (dat: boolean) => void;
+  setDataSource: (data: []) => void;
+};
 
-const AddPerson = ({ isAdding, setIsAdding, setDataSource }) => {
-  console.log(setDataSource);
+const AddPerson = ({ isAdding, setIsAdding, setDataSource }: Props) => {
   const { Option } = Select;
   const selectOptions = [
     { value: "female", label: "Female" },
@@ -22,7 +26,6 @@ const AddPerson = ({ isAdding, setIsAdding, setDataSource }) => {
   const [streetError, setStreetError] = useState(0);
   const [cityError, setCityError] = useState(0);
   const [phoneError, setPhoneError] = useState(0);
-  console.log(addingPerson);
 
   const resetEditing = () => {
     setIsAdding(false);
@@ -47,24 +50,19 @@ const AddPerson = ({ isAdding, setIsAdding, setDataSource }) => {
       console.log(error);
     }
   };
-  let isValid = true;
 
   const validateName = () => {
     if (addingPerson.name.length < 2) {
       setNameError(-1);
-      isValid = false;
     } else {
       setNameError(1);
-      isValid = true;
     }
   };
   const validateEmail = () => {
     if (!addingPerson.email) {
       setEmailError(-1);
-      isValid = false;
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(addingPerson.email)) {
       setEmailError(-1);
-      isValid = false;
     } else {
       setEmailError(1);
     }
@@ -72,52 +70,33 @@ const AddPerson = ({ isAdding, setIsAdding, setDataSource }) => {
   const validateGender = () => {
     if (!addingPerson.gender) {
       setGenderError(-1);
-
-      isValid = false;
     } else {
       setGenderError(1);
-      isValid = true;
     }
   };
   const validateStreet = () => {
     if (!addingPerson.address.street) {
       setStreetError(-1);
-      isValid = false;
     } else {
       setStreetError(1);
-      isValid = true;
     }
   };
   const validateCity = () => {
     if (!addingPerson.address.city) {
       setCityError(-1);
-      isValid = false;
     } else {
-      console.log(cityError);
       setCityError(1);
     }
   };
-  // const phoneValidation = () => {
-  //   const phoneRegex = /^\+1 \(\d{3}\) \d{3}-\d{4}(?:\d)?$/;
-  //   const isValidPhone = phoneRegex.test(addingPerson.phone);
-  //   if (!isValidPhone) {
-  //     setPhoneError(-1);
-  //     isValid = false;
-  //   } else {
-  //     setPhoneError(1);
-  //     isValid = true;
-  //   }
-  // };
+
   const phoneValidation = (e) => {
     const regex = /^\+1\s*\(\d{3}\)\s*\d{3}-\d{4}$/;
     const isValidPhone = regex.test(e.target.value);
 
     if (!isValidPhone) {
       setPhoneError(-1);
-      isValid = false;
     } else {
       setPhoneError(1);
-      isValid = true;
     }
   };
 
